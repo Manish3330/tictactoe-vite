@@ -40,7 +40,11 @@ function App() {
   return (
     <>
       <div className="app" >
-   
+      
+       <h1><span className='text-orange'>TIC</span> TAC <span className='text-green'> TOE</span> </h1>
+       <span style={{    'float': "right",
+    'font-size': "small",
+    'padding-left': "113px"}}> - Manish Prajapati 💖</span>
        <StatusMessage winner={winner} squares={current.board} isnext={current.isXnext}/>
         <Board squares={current.board} handleSquareClick={handleSquareClick} winningsquares={winningsquares} />
         
