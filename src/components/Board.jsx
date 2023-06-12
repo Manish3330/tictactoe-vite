@@ -3,27 +3,25 @@ import { useState } from 'react';
 
 const Board = () => {
   const [squares, setSquares] = useState(Array(9).fill(null));
+  const [isnext, setISnext] = useState(false);
   const handleSquareClick = clickedPositon => {
-    setSquares((currSquares)=>{
-        return currSquares.map((currSquareVal,pos)=>
-        {
-            if(clickedPositon===pos)
-            {
-                return 'X';
-            }
-            else
-            {
-                return currSquareVal;
-            }
-            
-        })
-    })
+    setSquares(currSquares => {
+      return currSquares.map((currSquareVal, pos) => {
+        if (clickedPositon === pos && currSquares[pos]==null) {
+          return isnext ? 'X' : '0';
+        } else {
+          return currSquareVal;
+        }
+      }); 
+    });
+    setISnext((IscurrX)=>!IscurrX);  
   };
   const render = Positon => {
     return (
-      
-        <Square value={squares[Positon]} onclick={() => handleSquareClick(Positon)} />
-      
+      <Square
+        value={squares[Positon]}
+        onclick={() => handleSquareClick(Positon)}
+      />
     );
   };
   return (
