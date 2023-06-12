@@ -5,15 +5,15 @@ const noMovesLeft = squares.every((value)=>{return value!==null})
   {
     if(winner)
     {
-      return(<div >Winner is <span className={winner==='X'? "text-green" : "text-orange"}>{winner}</span></div>)
+      return(<div >Winner is <span className={winner==='X'? "text-green" : "text-orange"}>{winner} 🥳 🥳</span></div>)
     }
     else if(!winner && noMovesLeft)
     {
-      return (<div>Game is tied !!!</div>)
+      return (<div>Game is Tied !!!🙂</div>)
     }
     else if(!winner && !noMovesLeft)
     {
-      return (<div>next player is <span className={nextplayer==='X'? "text-green" : "text-orange"}>{nextplayer}</span></div>)
+      return (<div>Next player is <span className={nextplayer==='X'? "text-green" : "text-orange"}>{nextplayer}</span></div>)
     }
   }
     

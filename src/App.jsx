@@ -3,32 +3,51 @@ import Board from './components/Board';
 import { useState } from 'react';
 import { calculateWinner } from './winner';
 import StatusMessage from './components/SttatusMessage';
+import History from './components/History';
+const NEW_GAME =[{board: Array(9).fill(null), isXnext: true}];
 function App() {
-  const [squares, setSquares] = useState(Array(9).fill(null));
-  const [isnext, setISnext] = useState(false);
-  const winner = calculateWinner(squares);
+  const [history, setHistory]= useState(NEW_GAME)
+  const [currMove,setMove]= useState(0);
+  const current = history[currMove];
+  const {winner,winningsquares} = calculateWinner(current.board);
 
   const handleSquareClick = clickedPositon => {
-    if (winner) return;
-    if (squares[clickedPositon] == null) {
-      setSquares(currSquares => {
-        return currSquares.map((currSquareVal, pos) => {
-          if (clickedPositon === pos) {
-            return isnext ? 'X' : 'O';
-          } else {
-            return currSquareVal;
-          }
-        });
-      });
-      setISnext(IscurrX => !IscurrX);
-    }
-  };
+    if(current.board[clickedPositon]!==null || winner)return;
+    setHistory(prev => {
+      const isTraversing = currMove+1!== history.length;
+      const last = isTraversing?prev[currMove]:prev[prev.length - 1];
 
+      const newBoard = last.board.map((square, pos) => {
+        if (pos === clickedPositon) {
+          return last.isXnext ? 'X' : 'O';
+        }
+      
+        return square;
+      });
+      const base = isTraversing?history.slice(0, history.indexOf(last)+1) : history
+      return base.concat({ board: newBoard, isXnext: !last.isXnext });
+    })
+    setMove((currentMove)=>currentMove+1);
+  
+  }
+  const moveTo =(move)=>{
+    setMove(move);
+  }
+  const onNewGameStart=()=>{
+    setHistory(NEW_GAME); 
+    setMove(0);
+  }
   return (
     <>
-      <div className="app">
-       <StatusMessage winner={winner} squares={squares} isnext={isnext}/>
-        <Board squares={squares} handleSquareClick={handleSquareClick} />
+      <div className="app" >
+   
+       <StatusMessage winner={winner} squares={current.board} isnext={current.isXnext}/>
+        <Board squares={current.board} handleSquareClick={handleSquareClick} winningsquares={winningsquares} />
+        
+        
+        <h2>Game History 🧐</h2>
+        <button type='button' onClick={onNewGameStart} className={`btn-reset ${winner?"active": ""}`}>Start New Game</button>
+        <History history ={history} moveTo={moveTo} currMove={currMove}/>
       </div>
     </>
   );
